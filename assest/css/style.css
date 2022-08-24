@@ -1,0 +1,225 @@
+:root {
+    --primary-color: rgb(203, 25, 25);
+    --opacity--black: rgba(0, 0, 0, 0.8);
+    --black-color: #000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(180deg, #43cea2, #185a9d);
+}
+
+.container {
+    margin-top: 10px;
+    box-shadow: 0 0 5px var(--opacity--black);
+    width: 350px;
+    height: 550px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dashboard {
+    background: linear-gradient(to right, rgb(161, 255, 206), rgb(250, 255, 209));
+    width: 350px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dashboard__heading {
+    text-align: center;
+}
+
+.dashboard__heading h3 {
+    font-size: 12px;
+    color: var(--primary-color);
+}
+
+.dashboard__heading h2 {
+    margin-top: 4px;
+    font-size: 16px;
+    color: var(--black-color);
+}
+
+.cd {
+    height: 200px;
+    width: 200px;
+    margin-top: 10px;
+}
+
+.cd img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--opacity--black);
+}
+
+.controls {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.control__list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.control__item {
+    color: var(--black-color);
+    opacity: 0.7;
+}
+
+:is(.repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn) {
+    cursor: pointer;
+}
+
+:is(.repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn):hover {
+    opacity: 1;
+}
+
+:is(.repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn):active {
+    color: var(--primary-color);
+}
+
+.play__pause-btn {
+    font-size: 35px;
+    color: var(--primary-color);
+}
+
+.progress {
+    -webkit-appearance: none;
+    background: #e8e6e6ff;
+    width: 100%;
+    opacity: 0.8;
+    border: 2px solid var(--opacity--black);
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.progress::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 5px;
+    background: var(--primary-color);
+    border: 3px solid var(--primary-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s linear;
+}
+
+.progress:hover::-webkit-slider-thumb {
+    width: 15px;
+    height: 10px;
+}
+
+.progress::-webkit-slider-thumb:active {
+    box-shadow: 0 0 10px red;
+}
+
+/* playlist */
+.playlist {
+    background: linear-gradient(to right, rgb(116, 243, 177), rgb(233, 244, 149));
+    padding: 10px;
+    border-top: 1px solid rgba(68, 67, 67, 0.8);
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.playlist::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+
+.song {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding: 8px;
+    box-shadow: 0 0 3px var(--opacity--black);
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.song + .song {
+    margin-top: 10px;
+}
+
+.song__info-wrap {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.song__description {
+    margin-left: 20px;    
+}
+
+.song__description-name {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.song__description-author {
+    font-size: 14px;
+    color:var(--opacity--black);
+    font-weight: 500;
+}
+
+.song__img img {
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--opacity--black);
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.song.active {
+    background: var(--primary-color);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.repeat__btn.active {
+    color: var(--primary-color);
+} 
+
+.play__pause-btn.active {
+    color: var(--primary-color);
+    opacity: 1;
+}
+
+.shuffle__btn.active {
+    color: var(--primary-color);
+}
