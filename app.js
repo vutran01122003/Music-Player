@@ -1,5 +1,6 @@
 var indexCurent = 0;
 
+
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
@@ -14,6 +15,8 @@ const shuffleBtn = $('.shuffle__btn');
 const dashBoardTitle = $('.dashboard__heading h2');
 const cdImg = $('.cd img');
 const progress = $('.progress');
+const currentMS = $('.current__time');
+const durationTime = $('.duration__time');
 
 Audio.prototype.play = (function(play) {
     return function () {
@@ -316,20 +319,27 @@ repeatBtn.addEventListener('click', function(e) {
     checkLoop();
 })
 
-//  Render currentTime audio
+var extraSeconds = 0;
+var currentMinuteAudio = 0;
+//  Render progess, current time  and next song
 audio.ontimeupdate = function() {
-    var progressPercent = 0;
-
     if(audio.duration) {
-        progressPercent =  Math.floor((audio.currentTime/audio.duration)*100);
-        progress.value = progressPercent;
-    }
+        const currentTimeAudio = Math.floor(audio.currentTime);
+        progress.value = currentTimeAudio;
 
+        const minute = Math.floor(currentTimeAudio/60);
+        const second = Math.floor((currentTimeAudio/60 - minute)*60);
+
+        if(second < 10) {
+            currentMS.innerText = `${minute}:0${second}`;
+        } else {
+            currentMS.innerText = `${minute}:${second}`;
+        }
+    }
+    
     // Shuffle songs and next songs at the end of the sound
-    if(progressPercent == 100 && shuffleBtn.classList.contains('active') && audio.loop == false) {
-        // Shuffle songs
+    if(progress.value == Math.floor(audio.duration) && shuffleBtn.classList.contains('active') && audio.loop == false) {
         const temp = indexCurent;
-        // check indexCurrent and index before
         do {
             indexCurent = Math.floor(Math.random()*app.songs.length);
         } while(indexCurent == temp);
@@ -337,16 +347,32 @@ audio.ontimeupdate = function() {
         uppdateMusic(indexCurent);
         updateActive(indexCurent);
         checkLoop()
-    } else if(progressPercent == 100 && audio.loop == false)  {
-        // next songs
+    } else if(progress.value == Math.floor(audio.duration) && audio.loop == false)  {
         nextSong();
         checkLoop()
     }     
-}   
+}
+
+// Render duration
+audio.onloadedmetadata = function() {
+    const durationAudio = Math.floor(audio.duration);
+    const minute = Math.floor(durationAudio/60).toString();
+    const second = Math.floor((durationAudio/60 - minute)*60).toString();
+
+    progress.max = Math.floor(audio.duration); 
+
+    if(JSON.parse(second) < 10) {
+       var newSecond = '0' + second;
+       durationTime.innerText = `${minute}:${newSecond}`;
+    } else {
+        durationTime.innerText = `${minute}:${second}`;
+    }
+};
+
 
 progress.addEventListener('input', function(e) {
     if(audio.duration) {
-        audio.currentTime = (audio.duration*progress.value)/100;
+        audio.currentTime = progress.value;
     } 
 })
 

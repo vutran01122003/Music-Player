@@ -43,7 +43,16 @@
                         </li>
                     </ul>
                     <input type="range" class="progress" value="0" step="1" min="0" max="100">
-                    <audio id="audio" src=""></audio>
+                    <div class="controls__sound-and-time">
+                        <div class="current__time-wrap">
+                            <span class="current__time">
+                                0:00
+                            </span>
+                            <span>/</span>
+                            <span class="duration__time">3:00</span>
+                        </div>
+                    </div>
+                    <audio id="audio" src="" preload="metadata"></audio>
                 </div>
             </div>
 
