@@ -1,10 +1,10 @@
 :root {
-    --primary-color: #e30022;
-    --opacity--black: rgba(0, 0, 0, 0.8);
+    --primary-color: #e3314b;
+    --opacity--black: rgba(0, 0, 0, 0.6);
     --black-color: #000;
     --background-body: linear-gradient(120deg, rgb(41, 128, 185), rgb(109, 213, 250), rgb(255, 255, 255));
-    --background-dasboard: linear-gradient(130deg, rgb(216, 132, 142), rgb(53, 216, 214));
-    --background-playlist: linear-gradient(-60deg, rgb(211, 80, 95), rgb(10, 191, 188));
+    --background-dasboard: linear-gradient(130deg, rgb(216, 132, 142), rgb(79, 242, 239));
+    --background-playlist: linear-gradient(-60deg, rgb(211, 80, 95), rgb(69, 209, 207));
     --white-color: #fff;
     --background-range: #e8e6e6ff;
 }
@@ -32,18 +32,118 @@ body {
     margin-top: 10px;
     box-shadow: 0 0 5px var(--opacity--black);
     width: 350px;
-    height: 550px;
+    height: 665px;
     border-radius: 10px;
     overflow: hidden;
 }
 
 .dashboard {
+    position: relative;
     background: var(--background-dasboard);
     width: 350px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/* volume */
+.volume__wrap {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    width: 120px;
+    top: 0;
+    left: 0;
+    margin: 8px 10px;
+    font-size: 18px;
+    z-index: 10;
+}
+
+.volume__icon-wrap {
+    width: 30px;
+}
+
+.range__wrap {
+    display: inline-block;
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--white-color);
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    justify-content: flex-end;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s linear;
+}
+
+.volume__icon-wrap {
+    position: relative;
+}
+
+.volume__icon-wrap::after {
+    content: '';
+    width: 150px;
+    height: 30px;
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+:is(.volume__icon-wrap, .volume__icon-wrap::after):hover+.range__wrap {
+    opacity: 1;
+    visibility: visible;
+}
+
+.range__wrap:hover {
+    opacity: 1;
+    visibility: visible;
+}
+
+.volume__value {
+    display: table-row;
+    width: 80px;
+    appearance: none;
+    background: transparent;
+    height: 4px;
+    z-index: 3;
+}
+
+.volume__value::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    display: table-row;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--black-color);
+    z-index: 1;
+
+}
+
+.volume__value::-moz-range-thumb {
+    -moz-appearance: none;
+    display: table-row;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--black-color);
+    z-index: 1;
+}
+
+.range__process-bar {
+    display: table-row;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 25%;
+    background: #e3314b;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .dashboard__heading {
@@ -88,26 +188,73 @@ body {
     justify-content: space-around;
 }
 
-.control__item {
+.control__item, .volume__icon {
     color: var(--black-color);
     opacity: 0.7;
+    transition: all 0.3s linear;
 }
 
-:is(.repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn) {
+:is(.volume__icon, .repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn) {
     color: var(--black-color); 
 }
 
-:is(.repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn):hover {
+:is(.volume__icon, .repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn):hover {
     opacity: 1;
 }
 
-:is(.repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn, .volume__icon):active {
+:is(.repeat__btn, .prev__btn, .play__pause-btn, .next__btn, .next__btn, .shuffle__btn):active {
     color: var(--primary-color);
 }
 
 .play__pause-btn {
     font-size: 35px;
     color: var(--primary-color);
+}
+
+.process__wrapper {
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    border-radius: 5px;
+    border: 1px solid var(--opacity--black);
+    overflow: hidden;
+    background: var(--white-color);
+    z-index: 10;
+}
+
+.range__bar {
+    display: table-row;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 0;
+    height: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: var(--primary-color);
+    z-index: -1;
+}
+
+.progress {
+    display: table-row;
+    appearance: none;
+    background: transparent;
+    width: 100%;
+    height: 8px;
+    opacity: 0.8;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.progress::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 8px;
+    background: var(--black-color);
+    cursor: pointer;
+    transition: all 0.2s linear;
 }
 
 .current__time-wrap {
@@ -117,43 +264,11 @@ body {
 }
 
 
-.progress {
-    -webkit-appearance: none;
-    background: var(--background-range);
-    width: 100%;
-    opacity: 0.8;
-    border: 2px solid var(--opacity--black);
-    border-radius: 5px;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.progress::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 10px;
-    height: 5px;
-    background: var(--primary-color);
-    border: 3px solid var(--primary-color);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.2s linear;
-}
-
-.progress:hover::-webkit-slider-thumb {
-    width: 15px;
-    height: 10px;
-}
-
-.progress::-webkit-slider-thumb:active {
-    box-shadow: 0 0 10px red;
-}
-
 /* playlist */
 .playlist {
     background: var(--background-playlist);
     padding: 10px;
-    border-top: 2px solid rgba(68, 67, 67, 0.8);
+    border-top: 2px solid var(--opacity--black);
     height: 300px;
     overflow-y: scroll;
 }
@@ -173,7 +288,7 @@ body {
     padding: 8px;
     box-shadow: 0 0 3px var(--opacity--black);
     border-radius: 10px;
-    background: #fff;
+    background: var(--white-color);
     cursor: pointer;
 }
 
@@ -205,7 +320,7 @@ body {
 .song__img img {
     width: 34px;
     height: 34px;
-    border: 2px solid var(--opacity--black);
+    border: 2px solid var(--black-color);
     object-fit: cover;
     border-radius: 50%;
 }

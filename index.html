@@ -15,6 +15,17 @@
     <body>
         <div class="container">
             <div class="dashboard">
+
+                <div class="volume__wrap">
+                    <div class="volume__icon-wrap">
+                        <i class="active volume__icon fa-sharp fa-solid fa-volume-high"></i>
+                    </div>
+                   <div class="range__wrap">
+                        <input type="range" class="volume__value" min="0" max="100" step="1" value="100">
+                        <div class="range__process-bar"></div>
+                   </div>
+                </div>
+
                 <div class="dashboard__heading">
                     <h3>Now playing: </h3>
                     <h2></h2>
@@ -42,7 +53,10 @@
                             <i class="pause__icon fa-solid fa-shuffle"></i>
                         </li>
                     </ul>
-                    <input type="range" class="progress" value="0" step="1" min="0" max="100">
+                    <div class="process__wrapper">
+                        <input type="range" class="progress" value="0" step="1" min="0" max="100">
+                        <div class="range__bar"></div>
+                    </div>
                     <div class="controls__sound-and-time">
                         <div class="current__time-wrap">
                             <span class="current__time">

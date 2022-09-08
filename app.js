@@ -6,6 +6,9 @@ const $$ = document.querySelectorAll.bind(document);
 
 const container = $('.container');
 const dashboard = $('.dashboard');
+const volumeBtn = $('.volume__icon');
+const volumeRange = $('.volume__value');
+const rangeProcessBar = $('.range__process-bar')
 const playList = $('.playlist');
 const repeatBtn = $('.repeat__btn');
 const prevBtn = $('.prev__btn');
@@ -15,6 +18,7 @@ const shuffleBtn = $('.shuffle__btn');
 const dashBoardTitle = $('.dashboard__heading h2');
 const cdImg = $('.cd img');
 const progress = $('.progress');
+const rangeBar = $('.range__bar');
 const currentMS = $('.current__time');
 const durationTime = $('.duration__time');
 
@@ -231,6 +235,7 @@ function uppdateMusic(index) {
     audio.src = app.songs[index].path;
     cdImg.src = app.songs[index].image;
     cdImg.style.animation = 'spin 20s linear infinite';
+    rangeBar.style.width = `0`;
     audio.play();
 }
 
@@ -244,6 +249,49 @@ function updateActive(indexSong) {
 }
 
 // Controls Audio
+function updateRangeWidth(rangeValue) {
+    rangeProcessBar.style.width = `${rangeValue*0.8}px`
+}
+
+function updateVolumeIcon(rangeValue) {
+    if(rangeValue > 50) {
+        volumeBtn.className = "active volume__icon fa-sharp fa-solid fa-volume-high";
+    } else if(rangeValue > 0 && rangeValue <=50) {
+        volumeBtn.className = "active volume__icon fa-solid fa-volume-low";
+    } else {
+        volumeBtn.className = "volume__icon fa-solid fa-sharp fa-volume-xmark";
+    }
+}
+
+function updateVolume(rangeValue) {
+    audio.volume = rangeValue/100;
+}
+
+updateRangeWidth(100);
+
+volumeRange.addEventListener('input', function() {
+    const rangeValue = volumeRange.value;
+    updateRangeWidth(rangeValue);
+    updateVolumeIcon(rangeValue);
+    updateVolume(rangeValue)
+})
+
+volumeBtn.addEventListener('click', function() {
+    volumeBtn.classList.toggle('active');
+    if(volumeBtn.classList.contains('active')) {
+        updateVolume(100);
+        volumeRange.value = 100;
+        updateRangeWidth(100);
+        volumeBtn.className = "active volume__icon fa-sharp fa-solid fa-volume-high";
+
+    } else {
+        updateVolume(0);
+        volumeRange.value = 0;
+        updateRangeWidth(0);
+        volumeBtn.className = "volume__icon fa-solid fa-sharp fa-volume-xmark";
+    }
+})
+
 playOrPauseBtn.addEventListener('click', function() {
     playOrPauseBtn.classList.toggle('active');
     if(playOrPauseBtn.classList.contains('active')) {
@@ -319,13 +367,25 @@ repeatBtn.addEventListener('click', function(e) {
     checkLoop();
 })
 
-var extraSeconds = 0;
-var currentMinuteAudio = 0;
+function updateRangeBar(currentTime) {
+    const dv = (progress.offsetWidth-9)/audio.duration;
+    rangeBar.style.width = `${currentTime*dv}px`;
+}
+
+progress.addEventListener('input', function(e) {
+    if(audio.duration) {
+        audio.currentTime = progress.value;
+        updateRangeBar(audio.currentTime);
+    } 
+})
+
 //  Render progess, current time  and next song
 audio.ontimeupdate = function() {
     if(audio.duration) {
         const currentTimeAudio = Math.floor(audio.currentTime);
         progress.value = currentTimeAudio;
+
+        updateRangeBar(currentTimeAudio);
 
         const minute = Math.floor(currentTimeAudio/60);
         const second = Math.floor((currentTimeAudio/60 - minute)*60);
@@ -360,7 +420,7 @@ audio.onloadedmetadata = function() {
     const second = Math.floor((durationAudio/60 - minute)*60).toString();
 
     progress.max = Math.floor(audio.duration); 
-
+    
     if(JSON.parse(second) < 10) {
        var newSecond = '0' + second;
        durationTime.innerText = `${minute}:${newSecond}`;
@@ -369,10 +429,4 @@ audio.onloadedmetadata = function() {
     }
 };
 
-
-progress.addEventListener('input', function(e) {
-    if(audio.duration) {
-        audio.currentTime = progress.value;
-    } 
-})
 
